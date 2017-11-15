@@ -1,13 +1,30 @@
 
 public class BinarySearchTree<K extends Comparable<K>,V> {
+//-----------NODE CLASS------------------------------------------//
+		private class ABBNode{
+			K key;
+			V val;
+			ABBNode left, right;
+			
+			public ABBNode(K key, V val){
+				this.key=key;
+				this.val=val;
+			}
+			public String toString(){
+				return "["+key+"-"+ val +"]";
+			}
+		}
+//------------END OF NODE CLASS----------------------------------//	
+		
 	private ABBNode root;
 
 //--------------------------------------------------------------------//		
+	//returns a boolean that says if the tree is empty or not
 	public boolean isEmpty(){
 		return this.root==null;
 	}
 	
-//--------------------------------------------------------------------//		
+//--------------------------------------------------------------------//	
 	public V get(K key){
 		ABBNode node=this.root;
 		while(node!=null){
@@ -207,7 +224,6 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
 		return salida;
 	}
 //--------------------------------------------------------------------//	
-
 	public String descendente(){
 		if(this.root==null){
 			return "";
@@ -227,31 +243,179 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
 		}
  		return salida;
 	}
-
 //--------------------------------------------------------------------//	
 	public String cualesPorNivel(int n){
+		if(n==0){
+			return this.root+"";
+		}
 		
+		String salida="";
+		ABBNode node=this.root;
+		QueueArray<ABBNode> queue=new QueueArray<ABBNode>();
+		queue.enqueue(this.root);
+		int x;
+		
+		for(int i=0;i<n;i++){
+			System.out.println(node);
+			x=queue.size();
+			while(x>0){			
+				node=queue.dequeue();
+				if(node.left!=null){
+					queue.enqueue(node.left);
+				}
+				if(node.right!=null){
+					queue.enqueue(node.right);
+				}
+				x--;
+			}
+		}
+		while(!queue.isEmpty()){
+			salida+=queue.dequeue();
+		}
+		return salida;
 	}
-
+	
 //--------------------------------------------------------------------//
-	public int mayoresA(K key){
-		
+	public String mayoresA(K key){
+		if(this.root==null){
+			return null;
+		}
+		else{
+			return this.mayoresA(this.root,key);
+		}
 	}
-	public String cuantasHojas(){
-		
+	private String mayoresA(ABBNode node,K key){
+		String salida="";
+		if(node==null){
+			return "";
+		}
+		salida+=this.mayoresA(node.left, key);
+		if(node.key.compareTo(key)>0){
+			salida+=node;
+		}
+		else{
+			salida+="";
+		}
+		salida+=this.mayoresA(node.right, key);
+		return salida;
 	}
+//--------------------------------------------------------------------//
+	public int cuantasHojas(){
+		return	this.cuantasHojas(this.root);
+	}
+	private int cuantasHojas(ABBNode node){
+		int n=0;
+		if(node==null){
+			return 0;
+		}
+		n += this.cuantasHojas(node.left);
+		if(node.left==null && node.right==null){
+			n++;
+		}
+		 n += this.cuantasHojas(node.right);
+		 return n;
+	}
+//--------------------------------------------------------------------//	
 	public String hojas(){
-		
+		return this.hojas(this.root);
 	}
+	private String hojas(ABBNode node){
+		String salida="";
+		if(node.left!=null){
+			salida += this.hojas(node.left);
+		}
+		
+		if(node.left==null && node.right==null){
+			salida=node+"";
+			return salida;
+		}
+		if(node.right!=null){
+			salida += this.hojas(node.right);
+		}
+		return salida;
+	}
+//--------------------------------------------------------------------//
 	public int altura(){
-		
+		String salida="";
+		ABBNode node=this.root;
+		QueueArray<ABBNode> queue=new QueueArray<ABBNode>();
+		queue.enqueue(this.root);
+		int x;
+		int n=0;
+		while(queue.size()>0){
+			n++;
+			x=queue.size();
+			while(x>0){			
+				node=queue.dequeue();
+				if(node.left!=null){
+					queue.enqueue(node.left);
+				}
+				if(node.right!=null){
+					queue.enqueue(node.right);
+				}
+				x--;
+			}
+		}
+		return n-1;
 	}
+//--------------------------------------------------------------------//
+
 	public int size(){
-		
+		if(this.root!=null){
+			return this.size(this.root);
+		}
+		else{
+			return 0;
+		}
 	}
+	private int size(ABBNode node){
+		int salida=0;
+		if(node.left!=null){
+			salida += this.size(node.left);
+		}
+		salida ++;
+		if(node.right!=null){
+			salida += this.size(node.right);
+		}
+		return salida;
+	}
+//--------------------------------------------------------------------//
 	public V remove(K key){
+		ABBNode node=this.root;
+		V temp;
+		while(node!=null){
+			int cmp=key.compareTo(node.k);
+			if(cmp==0){
+				break;
+			}
+			else if(cmp<0){
+				node=node.left;
+			}
+			else if(cmp>0){
+				node=node.right;
+			}
+		}
+		if(node==null){
+			return null;
+		}
+		else{
+			temp=node.val;
+			this.delete(node);
+		}
+		return temp;
+	}
+	
+	public delete(ABBNode z){
+		if(z.left==null){
+			z=z.right;
+		}
+		else if(z.right==null){
+			z=z.left;
+		}
 		
 	}
+	
+//--------------------------------------------------------------------//
 	
 	private ABBNode sucesor(ABBNode node){
 		if(node.right==null&&node.left==null){
@@ -281,29 +445,6 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
 		return node;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-//---------------------------------------------------------//
-	private class ABBNode{
-		K key;
-		V val;
-		ABBNode left, right;
-		
-		public ABBNode(K key, V val){
-			this.key=key;
-			this.val=val;
-		}
-		public String toString(){
-			return "["+key+"-"+ val +"]";
-		}
-	}
-//---------------------------------------------------------//
 	public static void main(String[] args){
 		BinarySearchTree<Integer,Integer> bst=new BinarySearchTree<Integer,Integer>();
 		BinarySearchTree<String,String> bst2=new BinarySearchTree<String,String>();
@@ -325,6 +466,24 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
 		bst2.add("A", "A");
 		bst2.add("C", "C");
 		bst2.add("I", "I");
+
+		BinarySearchTree<Integer,Integer> bst3 = new BinarySearchTree<Integer, Integer>();
+		
+		bst3.add(10, 10);
+//		bst3.add(8, 8);
+//		bst3.add(11, 11);
+//		bst3.add(7, 7);
+//		bst3.add(9,9);
+//		bst3.add(12, 12);
+//		bst3.add(18, 18);
+		bst3.add(16, 16);
+		bst3.add(19, 19);
+		bst3.add(15, 15);
+		bst3.add(14, 14);
+		bst3.add(1, 1);
+		bst3.add(2, 2);
+
+		
 		
 		System.out.println("I is:"+bst2.get("I"));
 		String s=bst.inOrder();
@@ -334,8 +493,16 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
 		System.out.println("preorderIT es: "+bst2.preOrderIt());
 		System.out.println("postorder es: "+bst2.postOrder());
 		System.out.println("por niveles es: " +bst2.porNiveles());
-		System.out.println("por descendente" +bst2.descendente());
-		System.out.println("contiene a 4012:"+ bst.contains(4012));
-		System.out.println("contiene a 5: "+bst.contains(5));
+		System.out.println("por descendente es:" +bst2.descendente());
+		System.out.println("por nivel en 1:" + bst2.cualesPorNivel(1));
+		System.out.println("mayores a:"+ bst2.mayoresA("G"));
+		
+		System.out.println("bst3 inorder: " + bst3.inOrder());
+		System.out.println("cuantas hojas?" + bst3.cuantasHojas());
+		System.out.println("Hojas: " + bst3.hojas());
+		System.out.println("cuanta altura? " + bst3.altura());
+		System.out.println("size? " + bst3.size());
+//		System.out.println("contiene a 4012:"+ bst.contains(4012));
+//		System.out.println("contiene a 5: "+bst.contains(5));
 	}
 }
