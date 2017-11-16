@@ -380,39 +380,101 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
 		return salida;
 	}
 //--------------------------------------------------------------------//
+//	public V remove(K key){
+//		ABBNode node=this.root;
+//		V temp;
+//		while(node!=null){
+//			int cmp=key.compareTo(node.key);
+//			if(cmp==0){
+//				break;
+//			}
+//			else if(cmp<0){
+//				node=node.left;
+//			}
+//			else if(cmp>0){
+//				node=node.right;
+//			}
+//		}
+//		if(node==null){
+//			return null;
+//		}
+//		else{
+//			temp=node.val;
+//			this.delete(node);
+//		}
+//		return temp;
+//	}
+//	public void transplant(ABBNode u,ABBNode v){
+//		if(this.sucesor(u)==null){
+//			this.root=v;
+//		}
+//		else if(u==sucesor(u).left){
+//			sucesor(u).left=v;
+//		}
+//		else{
+//			sucesor(u).right=v;
+//		}
+//		if(v!=null){
+////			sucesor(v)=sucesor(u);
+//		}
+//	}
+//	public void delete(ABBNode z){
+//		if(z.left==null){
+//			this.transplant(z,z.right);
+//		}
+//		else if(z.right==null){
+//			z=z.left;
+//		}
+//		else{
+//			y=this.
+//		}
+//		
+//	}
+
 	public V remove(K key){
-		ABBNode node=this.root;
-		V temp;
-		while(node!=null){
-			int cmp=key.compareTo(node.k);
-			if(cmp==0){
-				break;
+		ABBNode current=this.root;
+		ABBNode before=this.root;
+
+		boolean found=false;
+		while(current!=null&&!found) {
+			if(current.key.equals(key)) {
+				found=true;
 			}
-			else if(cmp<0){
-				node=node.left;
-			}
-			else if(cmp>0){
-				node=node.right;
+			else {
+				before=current;
+				if(current.key.compareTo(key)>0) {
+					current=current.left;
+				}
+				else {
+					current=current.right;
+				}
 			}
 		}
-		if(node==null){
+		if(current==null) {
 			return null;
 		}
-		else{
-			temp=node.val;
-			this.delete(node);
+		else if(found) {
+			if(current==this.root) {
+				ABBNode tmp=sucesor(this.root);
+				if(tmp!=null) {
+					if(tmp.key.compareTo(key)>0) {
+						tmp.left=this.root.left;
+					}
+					this.root=tmp;
+					tmp=null;
+				}
+				else {
+					return null;
+				}
+			}
+			else if(current.key.compareTo(key)>0) {
+				current.left=sucesor(current);
+			}
+			else if(before.key.compareTo(key)<0) {
+				before.right=sucesor(current);
+			}
 		}
-		return temp;
-	}
-	
-	public delete(ABBNode z){
-		if(z.left==null){
-			z=z.right;
-		}
-		else if(z.right==null){
-			z=z.left;
-		}
-		
+		return current.val;
 	}
 	
 //--------------------------------------------------------------------//
@@ -502,6 +564,8 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
 		System.out.println("Hojas: " + bst3.hojas());
 		System.out.println("cuanta altura? " + bst3.altura());
 		System.out.println("size? " + bst3.size());
+		System.out.println(bst3.remove(2));
+		System.out.println(bst3.inOrder());
 //		System.out.println("contiene a 4012:"+ bst.contains(4012));
 //		System.out.println("contiene a 5: "+bst.contains(5));
 	}
