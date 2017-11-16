@@ -53,10 +53,14 @@ public class Btree {
 			bw.newLine();
 			bw.write(nodo.c[0]+".ptr");
 			bw.newLine();
+			
+			
 			for(int i=0;i<nodo.n+1;i++) {
+				System.out.println("nodo k :" + nodo.x[i]);
 				bw.write(nodo.x[i]+".key");
 				bw.newLine();
 				bw.write(nodo.c[i+1]+".ptr");
+				System.out.println("nodo c :" + nodo.c[i+1]);
 				bw.newLine();
 			}
 		} 
@@ -245,10 +249,29 @@ public class Btree {
 		
 		
 		//copia la key a x
-		x.x[i-1]=y.x[t-1];
-		y.x[t-1]=0;
 		
+		System.out.println("y.x en t -1 es :" +y.x[t-1]);
+		x.x[i-1]=y.x[t-1];
+		
+		System.out.println("en y los valores son:");
+		for(int q=0;q<y.x.length;q++){
+			System.out.println(y.x[q]);
+		}
+		
+		//elimina los valores en y       agregado por mi
+		for(int q=y.x.length-1;q>t-2;q--){
+			System.out.println("q es:" +q);
+			System.out.println(y.x[q]);
+			y.x[q]=0;
+		}
 		x.n++;
+		
+		System.out.println("en y los valores son:");
+		for(int q=0;q<y.x.length;q++){
+			System.out.println(y.x[q]);
+		}
+		
+		
 		
 		System.out.println("en x es x:");
 		for(int q=0;q<x.x.length;q++){
@@ -256,8 +279,25 @@ public class Btree {
 		}
 		
 
+		
+		
+		System.out.println("en Y:");
+		for(int q=0;q<y.x.length;q++){
+			System.out.println(y.x[q]);
+		}
+		System.out.println("en Z:");
+		for(int q=0;q<y.x.length;q++){
+			System.out.println(z.x[q]);
+		}
+		System.out.println("en X:");
+		for(int q=0;q<y.x.length;q++){
+			System.out.println(x.x[q]);
+		}
+		System.out.println("y");
 		write_disk(y,y.x[0]+".ptr");
+		System.out.println("z");
 		write_disk(z,z.x[0]+".ptr");
+		System.out.println("x");
 		write_disk(x,x.x[0]+".ptr");
 	}
 
@@ -277,6 +317,7 @@ public class Btree {
 				x.x[i]=k;
 				x.n=x.n+1;
 //			}
+				System.out.println(x.x[0] + "adsa");
 		write_disk(x, x.x[0]+".ptr");
 		}
 		else {
@@ -295,6 +336,11 @@ public class Btree {
 				if(k>x.x[i]) {
 					i++;
 				}
+			}
+			n=read_disk(x.c[i-1]+".ptr");
+			
+			for(int b=0;b<n.x.length;b++){
+				System.out.println(n.x[b]);
 			}
 			insertNonfull(n, k);
 		}		
@@ -342,6 +388,9 @@ public class Btree {
 		bt.insert(50);
 		bt.insert(60);
 		bt.insert(70);
+		bt.insert(80);
+		bt.insert(90);
+		
 		System.out.println("search sirve????");
 //		bt.search(70);
 //		bt.insert(2);		
