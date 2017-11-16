@@ -208,26 +208,46 @@ public class Btree {
 		System.out.println("dsadopwqkdopwqkalñsdksalñ");
 		
 		//makes the space to the pointer from the y node to the node x
-		//no lo puedo revisar con mi ejemplo
-		for(int j=x.n-1;j>i+1;j--) {
-			x.c[j+1]=x.c[j];
-		}
 		
-		System.out.println("x en x es:");
+		System.out.println("antes:");
 		for(int q=0;q<x.x.length;q++){
 			System.out.println(x.c[q]);
 		}
 		
-		//makes space for the key from the node y to the node x
-		x.c[i+1]=z.x[0];
 		for(int j=x.n-1;j>i+1;j--) {
+			x.c[j+1]=x.c[j];
+		}
+		
+		System.out.println("despues:");
+		for(int q=0;q<x.x.length;q++){
+			System.out.println(x.c[q]);
+		}
+		
+		
+		//makes space for the key from the node y to the node x
+		
+		//así estaba
+//		x.c[i-1]=z.x[0];
+//		for(int j=x.n-1;j>i+1;j--) {
+//			x.x[j+1]=y.x[j];
+//		}
+		
+		x.c[i]=z.x[0];
+		for(int j=x.n-1;j>i+1;j--){
 			x.x[j+1]=y.x[j];
 		}
 		
-		//hasta aquí va bien
+		
+		System.out.println("despues2:");
+		for(int q=0;q<x.x.length;q++){
+			System.out.println(x.c[q]);
+		}
+		
 		
 		//copia la key a x
 		x.x[i-1]=y.x[t-1];
+		y.x[t-1]=0;
+		
 		x.n++;
 		
 		System.out.println("en x es x:");
@@ -264,7 +284,12 @@ public class Btree {
 				i--;
 			}
 			i++;
-			BNode n=read_disk(x.c[i]+".ptr");
+//			System.out.println("quise entrar a :" + x.c[i-1]);
+			System.out.println("x.c en i es :" +x.c[i-1]);
+			BNode n=read_disk(x.c[i-1]+".ptr");
+			
+			//hasta aquí está bien 
+			
 			if(n.n==2*t-1) {
 				splitChild(x, i);
 				if(k>x.x[i]) {
@@ -284,24 +309,26 @@ public class Btree {
 			s.ifLeaf=false;
 			s.n=0;
 			s.c[0]=r.x[0];
+//			System.out.println("---------------S--------------");
+//			System.out.println("Children: "+Arrays.toString(s.c));
+//			System.out.println("Keys: "+Arrays.toString(s.x));
+
 			splitChild(s, 1);
+
 			insertNonfull(s, k);
 
-			System.out.println("---------------S--------------");
-			System.out.println("Children: "+Arrays.toString(s.c));
-			System.out.println("Keys: "+Arrays.toString(s.x));
 
-			System.out.println("---------------Root--------------");
-			System.out.println("Children: "+Arrays.toString(root.c));
-			System.out.println("Keys: "+Arrays.toString(root.x));
+//			System.out.println("---------------Root--------------");
+//			System.out.println("Children: "+Arrays.toString(root.c));
+//			System.out.println("Keys: "+Arrays.toString(root.x));
 		}
 		
 		else {
 			insertNonfull(r, k);
 
-			System.out.println("---------------Root--------------");
-			System.out.println("Children: "+Arrays.toString(root.c));
-			System.out.println("Keys: "+Arrays.toString(root.x));
+//			System.out.println("---------------Root--------------");
+//			System.out.println("Children: "+Arrays.toString(root.c));
+//			System.out.println("Keys: "+Arrays.toString(root.x));
 		}
 //		write_disk(this.root, "root.ptr");
 	}
@@ -312,8 +339,11 @@ public class Btree {
 		bt.insert(35);
 		bt.insert(40);
 		System.out.println("------------------");
-//		bt.insert(19);
 		bt.insert(50);
+		bt.insert(60);
+		bt.insert(70);
+		System.out.println("search sirve????");
+//		bt.search(70);
 //		bt.insert(2);		
 //		bt.insert(4);
 //		bt.insert(5);
