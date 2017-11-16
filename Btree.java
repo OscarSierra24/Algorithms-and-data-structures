@@ -348,6 +348,7 @@ public class Btree {
 
 	public void insert(int k) {
 		BNode r=this.root;
+		System.out.println("root es:" + r.x[0]);
 		//if it's full
 		if(r.n==2*t-1) {
 			BNode s=new BNode(t);
@@ -389,14 +390,13 @@ public class Btree {
 		bt.insert(60);
 		bt.insert(70);
 		bt.insert(80);
-		bt.insert(90);
+//		bt.insert(90);
 		
+//		bt.insert(65);
+//		bt.insert(102);
+//		bt.insert(103);
 		System.out.println("search sirve????");
 //		bt.search(70);
-//		bt.insert(2);		
-//		bt.insert(4);
-//		bt.insert(5);
-//		bt.insert(6);
 		//System.out.println("Children: "+Arrays.toString(bt.root.c));
 		//System.out.println("Keys: "+Arrays.toString(bt.root.x));
 	}
